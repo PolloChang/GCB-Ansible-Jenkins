@@ -1,0 +1,20 @@
+@Library('gcb-jenkins-libraries')_
+node () {
+  //禁止並行建置
+  properties([disableConcurrentBuilds()])
+
+  //git參數
+  Map gitConfig = [
+    url: "git@github.com:PolloChang/GCB-Ansible.git",
+    credentialId: "32733b30-7ce7-4deb-8e0c-f57ca5603ddd",
+    branch: "*/main"
+  ]
+
+  stage ('Checkout') {
+    checkoutFromGit(gitConfig)
+  }
+  
+  stage('Execute Ansible'){
+   ansiblePlaybook disableHostKeyChecking: true ,credentialsId: 'd4008acd-d929-45dc-a811-8631c26555f3', inventory: 'inventories/development.yml', playbook: 'test.yml' 
+  }
+}
