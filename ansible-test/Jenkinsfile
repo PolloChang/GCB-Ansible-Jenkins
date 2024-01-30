@@ -17,4 +17,23 @@ node () {
   stage('Execute Ansible'){
    ansiblePlaybook disableHostKeyChecking: true ,credentialsId: 'd4008acd-d929-45dc-a811-8631c26555f3', inventory: 'inventories/development.yml', playbook: 'test.yml' 
   }
+
+  post {
+        always {
+            echo 'One way or another, I have finished'
+            deleteDir() /* clean up our workspace */
+        }
+        success {
+            echo 'I succeeeded!'
+        }
+        unstable {
+            echo 'I am unstable :/'
+        }
+        failure {
+            echo 'I failed :('
+        }
+        changed {
+            echo 'Things were different before...'
+        }
+    }
 }
